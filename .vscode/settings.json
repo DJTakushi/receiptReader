@@ -1,0 +1,4 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/extern/opencv/3rdparty/carotene",
+    "cmake.configureOnOpen": true,
+}
