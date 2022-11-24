@@ -1,3 +1,6 @@
+# .ssh contents (copied to docker image)
+env/.ssh/
+
 # Extern content (I couldn't get submoduels working happily in docker env)
 /extern/opencv/
 
