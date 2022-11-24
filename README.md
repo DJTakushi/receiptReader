@@ -7,11 +7,22 @@ reads receipts
 ```
 docker build . -t receipt_reader_devenv
 ```
+Note: if you plan on pushing commits to the remote from inside the docker 
+environment, then you'll need to copy your .ssh files into your docker 
+envrionment.
+- [Generating a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+You'll then have to copy your private .ssh key (`id_ed25519`) and `known_hosts`
+to `env/.ssh`.  See the *Dockerfile* for details.  Comment this section out
+of the Dockerfile if you don't care to add this functionality or you want to
+use another method (E.G.: generate keys from within the container.)
 
 2. Create an interactive container of the image:
 ```
 docker run -it -v C:\Users\okina\receiptReader\:/receiptReader --name rrenv receipt_reader_devenv
 ```
+You can close/open this container and attach to it using VSCode's `Attach to 
+Running Container` command.
 
 ## OpenCV Management Ideas:
 1. Submodule
