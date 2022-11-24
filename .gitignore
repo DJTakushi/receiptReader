@@ -1,3 +1,6 @@
+# Extern content (I couldn't get submoduels working happily in docker env)
+/extern/opencv/
+
 # Prerequisites
 *.d
 
