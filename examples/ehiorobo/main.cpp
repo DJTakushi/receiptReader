@@ -2,15 +2,12 @@
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
 #include <opencv2/opencv.hpp>
- 
-using namespace std;
-using namespace cv;
- 
+  
 int main(int argc, char* argv[])
 {
-    string outText, imPath = argv[1];
+    std::string outText, imPath = argv[1];
  
-    Mat im = cv::imread(imPath, IMREAD_COLOR);
+    cv::Mat im = cv::imread(imPath, cv::IMREAD_COLOR);
 	
 	tesseract::TessBaseAPI *ocr = new tesseract::TessBaseAPI();
      
@@ -18,8 +15,8 @@ int main(int argc, char* argv[])
     ocr->SetPageSegMode(tesseract::PSM_AUTO);
     ocr->SetImage(im.data, im.cols, im.rows, 3, im.step);
     
-    outText = string(ocr->GetUTF8Text());
-    cout << outText;
+    outText = std::string(ocr->GetUTF8Text());
+    std::cout << outText;
 	
 	ocr->End();
 
