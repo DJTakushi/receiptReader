@@ -40,7 +40,7 @@ Running Container` command.
 
 ## OpenCV Resources:
 - [OpenCV Docs Example Text Detection](https://docs.opencv.org/4.x/db/da4/samples_2dnn_2text_detection_8cpp-example.html)
-- 
+  - immediately unclear to me
 - [OpenCV-Free-Course](https://opencv.org/opencv-free-course/)
   - no ocr
 - [LearnOpenCv.com - deep learnign based text detection using opencv c python](https://learnopencv.com/deep-learning-based-text-detection-using-opencv-c-python/)
