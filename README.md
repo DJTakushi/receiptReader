@@ -48,3 +48,55 @@ Running Container` command.
 - [Medium articel by Evans Ehiorobo](https://medium.com/building-a-simple-text-correction-tool/basic-ocr-with-tesseract-and-opencv-34fae6ab3400)
   - uses tesseract
   - git repo of single code file
+  - works (see examples/ehiobobo)
+
+# Class Diagram
+```mermaid
+classDiagram
+class receipt{
+  +string imagePath
+  -string title
+  -time date
+  -float total
+  -string rawText
+  +receipt(string filepath, string rules)
+  +process()
+  -processImage()
+  -processRules()
+  +serialize()
+}
+
+class manager{
+  -vector~receipt~
+  +manager(vector~fileNames~, string options)
+  -getFileRules(string fileName) string
+  -addReceipt(string fileName, string rules)
+  +genOutString() string
+}
+
+```
+# Sequence Diagram 
+```mermaid
+sequenceDiagram
+  main ->> manager: manager(vector<fileNames>, options)
+  loop analyze
+    manager->>manager: search through rules for relevant string
+    manager->>receipt: receipt(fileName rule)
+    receipt->>receipt: processImage()
+    receipt->>receipt: processRules()
+    receipt->>manager: receipt
+  end
+  manager ->> main: manager
+  main ->> manager: genOutString()
+  loop serialize
+    manager ->> receipt: serialize()
+    receipt ->> manager: serialization
+  end
+  manager ->> main: string of serialization
+```
+
+# Steps
+1. create basic receipt class with stubbed functions
+2. create manager that communicates with receipt
+3. create interface that works with manager
+4. develop receipt
