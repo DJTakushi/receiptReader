@@ -25,12 +25,26 @@ You can close/open this container and attach to it using VSCode's `Attach to
 Running Container` command.
 
 ## OpenCV Management Ideas:
-1. Submodule
+1. ~~Submodule~~
     - seems to slow down git in docker environment
 2. apt-install
     - https://vitux.com/opencv_ubuntu/
       - `apt install libopencv-dev python3-opencv`
     - (-) windows VSCode will think there are errors
+      - solution: make script to copy from container filesystem to shared dir
     - (-) cmake variables will not be able to be passed to external build
+      - solution: minimal factor: openCV doesn't seem to get configured much
 3. add in a .gitignored folder (`extern`)
     - must manually acquire extern copy
+    - (-) building openCV will probably take several hours
+
+## OpenCV Resources:
+- [OpenCV Docs Example Text Detection](https://docs.opencv.org/4.x/db/da4/samples_2dnn_2text_detection_8cpp-example.html)
+- 
+- [OpenCV-Free-Course](https://opencv.org/opencv-free-course/)
+  - no ocr
+- [LearnOpenCv.com - deep learnign based text detection using opencv c python](https://learnopencv.com/deep-learning-based-text-detection-using-opencv-c-python/)
+  - light on details (East Modle not clear (yet))
+- [Medium articel by Evans Ehiorobo](https://medium.com/building-a-simple-text-correction-tool/basic-ocr-with-tesseract-and-opencv-34fae6ab3400)
+  - uses tesseract
+  - git repo of single code file
