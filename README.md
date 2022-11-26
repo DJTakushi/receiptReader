@@ -51,49 +51,61 @@ Running Container` command.
   - works (see examples/ehiobobo)
 
 # Class Diagram
+`manager` : generate data output from filenames
+`receiptRaw` : generate raw data table from OCR of filename
+`receiptProcessor` : generate processed data table from raw data and rules
 ```mermaid
 classDiagram
-class receipt{
+class manager{
+  -vector~receipt~
+  +manager(vector~fileNames~, string options)
+  +genOutString() string
+}
+class receiptRaw{
   +string imagePath
   -string title
   -time date
   -float total
   -string rawText
-  +receipt(string filepath, string rules)
-  +process()
-  -processImage()
-  -processRules()
+  +receiptRaw(string filepath)
+  +getRawText()
+  -parseRawText()
   +serialize()
 }
+class receiptProcessor{
+  +string imagePath
+  -string title
+  -time date
+  -float total
 
-class manager{
-  -vector~receipt~
-  +manager(vector~fileNames~, string options)
-  -getFileRules(string fileName) string
-  -addReceipt(string fileName, string rules)
-  +genOutString() string
+  +receiptProcessor(string filepath, data rawData, string rulesText)
+  -applyRules()
+  +serialize()
 }
-
 ```
 # Sequence Diagram 
 ```mermaid
 sequenceDiagram
   main ->> manager: manager(vector<fileNames>, options)
   loop analyze
-    manager->>manager: search through rules for relevant string
-    manager->>receipt: receipt(fileName rule)
-    receipt->>receipt: processImage()
-    receipt->>receipt: processRules()
-    receipt->>manager: receipt
+    manager->>receiptRaw: receiptRaw(fileName)
+    receiptRaw->>manager: rawData
+    manager->>receiptProcessor: (filename, rawData, rulesText)
+    receiptProcessor->>manager: receiptProcessor
   end
   manager ->> main: manager
   main ->> manager: genOutString()
   loop serialize
-    manager ->> receipt: serialize()
-    receipt ->> manager: serialization
+    manager ->> receiptProcessor: serialize()
+    receiptProcessor ->> manager : serialization
   end
   manager ->> main: string of serialization
 ```
+
+# Design revisions for SOLID:
+- [ ] apply abstract factory patterns (useful for unit testing)
+- [x] name a single responsibility for each class (split up current classes)
+  - responsibility: *reason to change*
 
 # Steps
 1. create basic receipt class with stubbed functions
