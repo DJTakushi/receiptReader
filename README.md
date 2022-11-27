@@ -1,6 +1,5 @@
 # receiptReader
-reads receipts
-
+Reads images of receipts and creates a JSON file of the aggregation of the data (title, date, total).  A JSON of `rules.json` can be used to override values for a specific filename.
 
 ## Development Environment
 1. In *env* folder, create a docker image of the environment by running
@@ -50,37 +49,78 @@ Running Container` command.
   - git repo of single code file
   - works (see examples/ehiobobo)
 
-# Class Diagram
+# Class responsibilities
 `manager` : generate data output from filenames
+`receiptFactory` : generate appropriate receipt objects as interface class objects
 `receiptRaw` : generate raw data table from OCR of filename
-`receiptProcessor` : generate processed data table from raw data and rules
+`receiptParser` : parse text from receiptRaw and put it into class data
+`receiptProcessor` : generate processed data table from parsed data + rules
+# Class Diagram
 ```mermaid
 classDiagram
 class manager{
-  -vector~receipt~
+  -vector~receiptProcessor_i~
   +manager(vector~fileNames~, string options)
   +genOutString() string
 }
+
+receiptFactory_i <|-- receiptFactory
+class receiptFactory_i{
+  +createReceiptRaw(string fileName)* receiptRaw_i
+  +createReceiptParser(string rawText)* receipParser_i
+  +createReceiptProcessor(string fileName, string rawData, string rulesText)* receiptProcessor_i
+}
+class receiptFactory{
+  +createReceiptRaw(string fileName) receiptRaw_i
+  +createReceiptParser(string rawText) receipParser_i
+  +createReceiptProcessor(string fileName, string rawData, string rulesText) receiptProcessor_i
+}
+receiptRaw_i <|-- receiptRaw
+class receiptRaw_i{
+  +string imagePath
+  -string rawText
+  +receiptRaw_i(string filepath)*
+  +getRawText()* string
+}
 class receiptRaw{
   +string imagePath
+  -string rawText
+  +receiptRaw(string filepath)
+  +getRawText() string
+}
+
+receiptParser_i <|-- receiptParser
+class receiptParser_i{
   -string title
   -time date
   -float total
-  -string rawText
-  +receiptRaw(string filepath)
-  +getRawText()
-  -parseRawText()
-  +serialize()
+  +receiptParser_i(string rawText)*
 }
+class receiptParser{
+  -string title
+  -time date
+  -float total
+  +receiptParser(string rawText)
+}
+
+receiptProcessor_i <|-- receiptProcessor
 class receiptProcessor{
   +string imagePath
   -string title
   -time date
   -float total
-
-  +receiptProcessor(string filepath, data rawData, string rulesText)
+  +receiptProcessor(string fp, receiptParser_i* rp, string rules)
   -applyRules()
   +serialize()
+}
+class receiptProcessor_i{
+  +string imagePath
+  -string title
+  -time date
+  -float total
+  +receiptProcessor(string fp, receiptParser_i* rp, string rules)*
+  -applyRules()*
+  +serialize()*
 }
 ```
 # Sequence Diagram 
@@ -88,22 +128,31 @@ class receiptProcessor{
 sequenceDiagram
   main ->> manager: manager(vector<fileNames>, options)
   loop analyze
-    manager->>receiptRaw: receiptRaw(fileName)
-    receiptRaw->>manager: rawData
-    manager->>receiptProcessor: (filename, rawData, rulesText)
+    manager->>receiptFactory: createReceiptRaw(fileName)
+    receiptFactory->>receiptRaw: receiptRaw(fileName)
+    receiptRaw->>manager: receiptRaw
+    manager->>receiptRaw: receiptRaw.getRawText()
+    receiptRaw->>manager: rawText
+
+    manager->>receiptFactory: createReceiptParser(rawText)
+    receiptFactory->>receiptParser: receiptParser(rawText)
+    receiptParser->>manager: receiptParser
+
+    manager->>receiptFactory: createReceiptProcessor(filename, receiptParser, rulesText)
+    receiptFactory->>receiptProcessor: (filename, receiptParser, rulesText)
     receiptProcessor->>manager: receiptProcessor
   end
   manager ->> main: manager
   main ->> manager: genOutString()
   loop serialize
-    manager ->> receiptProcessor: serialize()
+    manager ->> receiptProcessor: receiptProcessor.serialize()
     receiptProcessor ->> manager : serialization
   end
   manager ->> main: string of serialization
 ```
 
 # Design revisions for SOLID:
-- [ ] apply abstract factory patterns (useful for unit testing)
+- [x] apply abstract factory patterns (useful for unit testing)
 - [x] name a single responsibility for each class (split up current classes)
   - responsibility: *reason to change*
 
@@ -112,3 +161,8 @@ sequenceDiagram
 2. create manager that communicates with receipt
 3. create interface that works with manager
 4. develop receipt
+
+# Improvements
+- [x] move parsing to a receiptParser class
+- [x] pass parser object to processor to avoid encoding/decoding data and separarate repsonsibilities
+- [x] explicit function calls in sequence diagram
