@@ -4,7 +4,7 @@ Reads images of receipts and creates a JSON file of the aggregation of the data 
 ## Development Environment
 1. In *env* folder, create a docker image of the environment by running
 ```
-docker build . -t receipt_reader_devenv
+docker build . -t rr
 ```
 Note: if you plan on pushing commits to the remote from inside the docker 
 environment, then you'll need to copy your .ssh files into your docker 
@@ -22,6 +22,16 @@ docker run -it -v C:\Users\okina\receiptReader\:/receiptReader --name rrenv rece
 ```
 You can close/open this container and attach to it using VSCode's `Attach to 
 Running Container` command.
+
+## Production Environment
+#### 1. Build Image
+```
+docker build . -t rr_p
+```
+#### 2. Run Container
+```
+docker run --rm --name receipt_reader
+```
 
 ## OpenCV Management Ideas:
 1. ~~Submodule~~
