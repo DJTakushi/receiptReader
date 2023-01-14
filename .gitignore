@@ -1,3 +1,5 @@
+build/
+
 # .ssh contents (copied to docker image)
 env/.ssh/
 
