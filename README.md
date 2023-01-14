@@ -138,17 +138,14 @@ class receiptProcessor_i{
 sequenceDiagram
   main ->> manager: manager(vector<fileNames>, options)
   loop analyze
-    manager->>receiptFactory: createReceiptRaw(fileName)
+    manager->>receiptFactory: rr=createReceiptRaw(fileName)
     receiptFactory->>receiptRaw: receiptRaw(fileName)
-    receiptRaw->>manager: receiptRaw
-    manager->>receiptRaw: receiptRaw.getRawText()
-    receiptRaw->>manager: rawText
+    manager->>receiptRaw: rawText=rr.getRawText()
 
-    manager->>receiptFactory: createReceiptParser(rawText)
+    manager->>receiptFactory: parser=createReceiptParser(rawText)
     receiptFactory->>receiptParser: receiptParser(rawText)
-    receiptParser->>manager: receiptParser
 
-    manager->>receiptFactory: createReceiptProcessor(filename, receiptParser, rulesText)
+    manager->>receiptFactory: createReceiptProcessor(filename, parser, rulesText)
     receiptFactory->>receiptProcessor: (filename, receiptParser, rulesText)
     receiptProcessor->>manager: receiptProcessor
   end
