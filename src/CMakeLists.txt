@@ -11,6 +11,8 @@ add_executable(
 target_include_directories(utest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(
     utest
+    lept
+    tesseract
     GTest::gtest_main
     ${GTEST_LIBRARIES}
     pthread
