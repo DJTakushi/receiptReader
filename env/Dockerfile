@@ -1,7 +1,7 @@
 FROM gcc:latest
 LABEL Name=receipt_reader_env Version=0.0.1
 RUN apt-get -y update && apt-get install -y cmake vim tesseract-ocr \
-libtesseract-dev libleptonica-dev
+libtesseract-dev libleptonica-dev libgtest-dev
 ################################################################################
 ################################ ssh setup #####################################
 ################################################################################
