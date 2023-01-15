@@ -1,4 +1,4 @@
-#include "receiptRaw.h"
+#include <receiptRaw.h>
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
 receiptRaw::receiptRaw(std::string filepath){
