@@ -7,6 +7,8 @@ add_executable(
     generic.test.cpp
     receiptRaw.cpp
     receiptRaw.test.cpp
+    receiptParser.cpp
+    receiptParser.test.cpp
     )
 target_include_directories(utest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(
